@@ -57,7 +57,7 @@ public class AcceptorLearningExperiment {
 		SDTLogicOracle slo = new MultiTheorySDTLogicOracle(consts, solver);
 
 		TreeOracleFactory hypFactory = (RegisterAutomaton hyp) -> createSimulatorMTO(hyp, teachers,
-				new Constants(), solver);
+				consts, solver);
 		
 		RaStar rastar = new RaStar(mto, hypFactory, slo, consts, teachers, solver, actionSymbols);
 		rastar.learn();
