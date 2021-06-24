@@ -26,7 +26,7 @@ public class BooleanFIFOLearningExample {
 		Constant cFalse = constsGen.next(BooleanFIFOSUL.INT_TYPE);
 		consts.put(cFalse, DataValue.ZERO(BooleanFIFOSUL.INT_TYPE, Integer.class));
 		consts.put(cTrue, DataValue.ONE(BooleanFIFOSUL.INT_TYPE, Integer.class));
-		BooleanFIFOSUL sul = new BooleanFIFOSUL(5);
+		BooleanFIFOSUL sul = new BooleanFIFOSUL(2);
 		ParameterizedSymbol[] actionSymbols = sul.getActionSymbols(); 
 		
 		IOLearningExperiment learningExperiment = new IOLearningExperiment();
