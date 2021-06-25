@@ -41,12 +41,26 @@ public class IOLearningExperiment {
 	private double resetProbability = 0.1; // reset probability
 	private double freshProbability = 0.5; // prob. of choosing a fresh data value
 	private int maxDepth = 100; // max depth
+	private int maxIter = 0;
 	
 	public IOLearningExperiment() {
 		random = new Random();
 	}
 	
 	
+	/**
+	 * Set the maximum number of hypothesis construction iterations
+	 */
+	public void setMaxIterations(int maxIter) {
+		this.maxIter = maxIter;
+	}
+	
+	/**
+	 * Set the bound on the length of the tests generated.
+	 */
+	public void setMaxDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
+	}
 	
 	public IOEquivalenceOracle createEquivalenceOracle(Map<DataType, Theory> teachers, Constants consts, IOOracle target, ParameterizedSymbol[] inputSymbols) {
 		IORandomWalk randWalk = new IORandomWalk(random, target, false, // do not
@@ -135,6 +149,10 @@ public class IOLearningExperiment {
 			rastar.learn();
 			// hypothesis
 			Hypothesis hyp = rastar.getHypothesis();
+			
+			if (maxIter != 0 && check >= maxIter) {
+				break;
+			}
 
 			ce = equOracle.findCounterExample(hyp, null);
 

@@ -2,37 +2,40 @@
 
 package matlab;
 
-import com.mathworks.engine.MatlabEngine;
-import com.mathworks.engine.*;
-import com.mathworks.matlab.types.Struct;
-import com.mathworks.engine.EngineException;
-
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.io.IOException;
-import java.lang.InterruptedException;
 
-import de.learnlib.ralib.data.Constants;
+import com.mathworks.engine.MatlabEngine;
+import com.mathworks.matlab.types.Struct;
+
 import de.learnlib.ralib.data.DataType;
-import de.learnlib.ralib.solver.ConstraintSolver;
-import de.learnlib.ralib.solver.simple.SimpleConstraintSolver;
-import de.learnlib.ralib.theory.Theory;
-import de.learnlib.ralib.tools.theories.IntegerEqualityTheory;
-import de.learnlib.ralib.words.ParameterizedSymbol;
-import de.learnlib.api.SULException;
 import de.learnlib.ralib.data.DataValue;
 import de.learnlib.ralib.sul.DataWordSUL;
 import de.learnlib.ralib.words.InputSymbol;
 import de.learnlib.ralib.words.OutputSymbol;
 import de.learnlib.ralib.words.PSymbolInstance;
+import de.learnlib.ralib.words.ParameterizedSymbol;
 
-public class LSMSUL extends DataWordSUL {
+public class LSMV2SUL extends DataWordSUL {
 
+	
 	public static final DataType INT_TYPE = new DataType("int", Integer.class);
+	public static final DataType LANE_CHANGE_REQUEST_TYPE = new DataType("int", Integer.class);
+	
+	public static final int NUM_PARAM = 9;
+	
+	public static final PSymbolInstance input(Object ... arguments) {
+		DataValue [] dv = new DataValue[arguments.length];
+		for (int i=0; i<arguments.length; i++) {
+			dv[i] = new DataValue(INT_TYPE, arguments[i]);
+		}
+		
+		return new PSymbolInstance(main_v2, dv);
+	}
 
 //    public static final DataType STRUCT_TYPE = 
 //            new DataType("int[]", Integer.class);   
@@ -44,11 +47,31 @@ public class LSMSUL extends DataWordSUL {
 	 * 
 	 * //finish here
 	 */
-	public static final ParameterizedSymbol main_v2 = // public static final ParameterizedSymbol OFFER =
-			new InputSymbol("main_v2", new DataType[] { INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
-					INT_TYPE, INT_TYPE, INT_TYPE });
+	
+	
+	
+	
+	public static ParameterizedSymbol main_v2 = // public static final ParameterizedSymbol OFFER =
+			new InputSymbol("main_v2", new DataType[] { INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, 
+					INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE });
 	// new InputSymbol("offer", new DataType[]{INT_TYPE});
+	
 
+	private static Map<Integer, Integer> boundParams = new LinkedHashMap<>();
+	
+
+	private static final ParameterizedSymbol generateInputSymbol(Map<Integer, Integer> boundParam) {
+		int numParam = NUM_PARAM - boundParam.size();
+		DataType [] typeArr = new DataType[numParam];
+		Arrays.fill(typeArr, INT_TYPE);
+		return new InputSymbol("main_v2", typeArr);
+	}
+	
+	public static final void bindInputParameters(Map<Integer, Integer> fixedParams) {
+		LSMV2SUL.boundParams = fixedParams;
+		main_v2 = generateInputSymbol(fixedParams); 
+	}
+	
 	public final ParameterizedSymbol[] getInputSymbols() {
 		return new ParameterizedSymbol[] { main_v2 };
 	}
@@ -66,6 +89,8 @@ public class LSMSUL extends DataWordSUL {
 	}
 
 	public static com.mathworks.engine.MatlabEngine matEng;
+	
+	
 
 	// private FIFOExample fifo;
 	// private List<Integer> fifo;
@@ -80,12 +105,27 @@ public class LSMSUL extends DataWordSUL {
 	private double b4;
 	private double b5;
 	private double b6;
+	
+	private Integer [] getParameterValues(PSymbolInstance input) {
+		Integer [] values = new Integer [NUM_PARAM];
+		int inputParamIdx=0;
+		for (Integer i=0; i<NUM_PARAM; i++ ) {
+			if (boundParams.containsKey(i)) {
+				values[i] = boundParams.get(i);
+			} else {
+				values[i] = (Integer) input.getParameterValues()[inputParamIdx++].getId();
+			}
+		}
+		
+		return values;
+	}
+	
 
 	// here should go the definition of fifo as list of elements
 	// private List<Integer> fifo;
 	// private int varargin;
 
-	public LSMSUL() throws ExecutionException, InterruptedException, TimeoutException {
+	public LSMV2SUL() throws ExecutionException, InterruptedException, TimeoutException {
 		matEng = MatlabWrapper.getInstance().connect();
 		MatlabEngine.startMatlab();
 	}
@@ -96,7 +136,7 @@ public class LSMSUL extends DataWordSUL {
 			// matEng.startMatlab();
 //    		System.out.println("start PRE() function");
 //        	System.out.println("initialize countReset(1)");
-			String matlabResource = LSMSUL.class.getResource("/matlab").getFile();
+			String matlabResource = LSMV2SUL.class.getResource("/matlab").getFile();
 			matEng.eval(
 					"cd '" + matlabResource + "'");
 //			System.out.println("cd matlab_files/mainv2_simplified"); 
@@ -177,13 +217,19 @@ public class LSMSUL extends DataWordSUL {
 //    			System.out.println("Struct st");
 //    			System.out.println(st);
 
-			matEng.eval("st = main_v2(" + (Integer) i.getParameterValues()[0].getId() + ", "
-					+ (Integer) i.getParameterValues()[1].getId() + ", " + (Integer) i.getParameterValues()[2].getId()
-					+ ", " + (Integer) i.getParameterValues()[3].getId() + ", "
-					+ (Integer) i.getParameterValues()[4].getId() + ", " + (Integer) i.getParameterValues()[5].getId()
-					+ ", " + (Integer) i.getParameterValues()[6].getId() + ", "
-					+ (Integer) i.getParameterValues()[7].getId() + ", " + (Integer) i.getParameterValues()[8].getId()
-					+ ")");
+			Integer[] vals = getParameterValues(i);
+			StringBuilder evalBuilder = new StringBuilder().append("st = main_v2(");
+			if (vals.length > 0) {
+				int idx;
+				for (idx=0; idx< vals.length-1; idx++) {
+					evalBuilder.append(vals[idx]).append(", ");
+				}
+				evalBuilder.append(vals[idx]);
+			}
+			evalBuilder.append(")");
+			System.out.println(evalBuilder.toString());
+			
+			matEng.eval(evalBuilder.toString());
 //    			System.out.println("computed main_v2");
 
 			st = matEng.getVariable("st");
