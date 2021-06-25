@@ -59,17 +59,18 @@ public class Main {
 		Constants constants = new Constants();
 		// make sure to define constants for every type
 		ConstantGenerator cGen = new SymbolicDataValueGenerator.ConstantGenerator();
-		Constant c0 = cGen.next(LSMV2SUL.INT_TYPE);
 		Constant c1 = cGen.next(LSMV2SUL.INT_TYPE);
 		Constant c2 = cGen.next(LSMV2SUL.INT_TYPE);
-		constants.put(c0, new DataValue(LSMV2SUL.INT_TYPE, 0));
-		constants.put(c1, new DataValue(LSMV2SUL.INT_TYPE, 1));
-		constants.put(c2, new DataValue(LSMV2SUL.INT_TYPE, 2));
+		Constant c3 = cGen.next(LSMV2SUL.INT_TYPE);
+		constants.put(c1, new DataValue(LSMV2SUL.INT_TYPE, 0));
+		constants.put(c2, new DataValue(LSMV2SUL.INT_TYPE, 1));
+		constants.put(c3, new DataValue(LSMV2SUL.INT_TYPE, 2));
 		
 		Constant cDirLeft = cGen.next(LSMV2SUL.DIRECTION_TYPE);
 		Constant cDirRight = cGen.next(LSMV2SUL.DIRECTION_TYPE);
-		constants.put(cDirLeft, new DataValue(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, 1));
-		constants.put(cDirRight, new DataValue(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, 2));
+		constants.put(cDirLeft, new DataValue(LSMV2SUL.DIRECTION_TYPE, 1));
+		constants.put(cDirRight, new DataValue(LSMV2SUL.DIRECTION_TYPE, 2));
+		
 		
 		Constant cLcrFalse = cGen.next(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE);
 		constants.put(cLcrFalse, new DataValue(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, 0));
