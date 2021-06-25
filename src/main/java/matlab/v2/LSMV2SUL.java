@@ -32,7 +32,7 @@ public class LSMV2SUL extends DataWordSUL {
 	public static final PSymbolInstance input(Object ... arguments) {
 		DataValue [] dv = new DataValue[arguments.length];
 		for (int i=0; i<arguments.length; i++) {
-			dv[i] = new DataValue(INT_TYPE, arguments[i]);
+			dv[i] = new DataValue(main_v2.getPtypes()[i], arguments[i]);
 		}
 		
 		return new PSymbolInstance(main_v2, dv);
@@ -49,12 +49,13 @@ public class LSMV2SUL extends DataWordSUL {
 	 * //finish here
 	 */
 	
-	
-	
-	
-	public static ParameterizedSymbol main_v2 = // public static final ParameterizedSymbol OFFER =
+	public static final ParameterizedSymbol main_v2_orig = // public static final ParameterizedSymbol OFFER =
 			new InputSymbol("main_v2", new DataType[] { INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, 
 					INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE });
+	
+	
+	
+	public static ParameterizedSymbol main_v2 = main_v2_orig;
 	// new InputSymbol("offer", new DataType[]{INT_TYPE});
 	
 
@@ -63,7 +64,12 @@ public class LSMV2SUL extends DataWordSUL {
 	private static final ParameterizedSymbol generateInputSymbol(Map<Integer, Integer> boundParam) {
 		int numParam = NUM_PARAM - boundParam.size();
 		DataType [] typeArr = new DataType[numParam];
-		Arrays.fill(typeArr, INT_TYPE);
+		int typeArrIdx=0;
+		for (Integer i=0; i<NUM_PARAM; i++) {
+			if (!boundParam.containsKey(i)) {
+				typeArr[typeArrIdx++] = main_v2_orig.getPtypes()[i];
+			}
+		}
 		return new InputSymbol("main_v2", typeArr);
 	}
 	

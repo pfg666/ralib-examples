@@ -64,6 +64,7 @@ public class Main {
 		constants.put(c0, new DataValue(LSMV2SUL.INT_TYPE, 0));
 		constants.put(c1, new DataValue(LSMV2SUL.INT_TYPE, 1));
 		constants.put(c2, new DataValue(LSMV2SUL.INT_TYPE, 2));
+		
 		IOLearningExperiment experiment = new IOLearningExperiment();
 		LSMV2SUL sul = new LSMV2SUL();
 		IntegerEqualityTheory lCRTheory = new IntegerEqualityTheory(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE);
