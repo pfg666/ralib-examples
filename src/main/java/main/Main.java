@@ -30,11 +30,14 @@ public class Main {
 	public static void main(String[] args) throws IllegalArgumentException, IllegalStateException, InterruptedException, ExecutionException, TimeoutException {
 		bindParameters();
 		//testRandomly();
-		runLearningExperiment();
+		runLearningExperiment(
+				3 // test length bound
+				);
 	}
 	
 	
 	// experiment with which parameters to fix such that learning is still successful.
+	// so far it seems that 4 parameters is the upper limit if we don't use typing
 	/**
 	 * bind parameters of the SUL input to concrete values
 	 */
@@ -42,7 +45,7 @@ public class Main {
 		LinkedHashMap<Integer, Integer> boundParam = new LinkedHashMap<Integer,Integer>();
 		//boundParam.put(0, 0); // state
 		//boundParam.put(1, 0); // direction
-		boundParam.put(2, 0); // lcr
+		//boundParam.put(2, 0); // lcr
 		boundParam.put(3, 0); // b1
 		boundParam.put(4, 0); // b2
 		boundParam.put(5, 0); // lcr
@@ -52,7 +55,7 @@ public class Main {
 		LSMV2SUL.bindInputParameters(boundParam);
 	}
 	
-	public static void runLearningExperiment() throws ExecutionException, InterruptedException, TimeoutException {
+	public static void runLearningExperiment(int testLengthBound) throws ExecutionException, InterruptedException, TimeoutException {
 		Constants constants = new Constants();
 		ConstantGenerator cGen = new SymbolicDataValueGenerator.ConstantGenerator();
 		Constant c0 = cGen.next(LSMV2SUL.INT_TYPE);
@@ -72,8 +75,7 @@ public class Main {
 		theories.put(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, lCRTheory);
 		SimpleConstraintSolver solver = new SimpleConstraintSolver();
 		ParameterizedSymbol[] actionSymbols = sul.getActionSymbols();
-		experiment.setMaxIterations(2);
-		experiment.setMaxDepth(2);
+		experiment.setMaxDepth(testLengthBound);
 		experiment.runIOLearningExperiment(sul, theories, constants, solver, actionSymbols, LSMV2SUL.ERROR);
 	}
 
@@ -87,7 +89,6 @@ public class Main {
 					randInput(3),
 					randInput(3)
 					));
-			System.out.println(output);
 		}
 	}
 	

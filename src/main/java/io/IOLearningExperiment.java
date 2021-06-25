@@ -41,7 +41,7 @@ public class IOLearningExperiment {
 	private double resetProbability = 0.1; // reset probability
 	private double freshProbability = 0.5; // prob. of choosing a fresh data value
 	private int maxDepth = 100; // max depth
-	private int maxIter = 0;
+	private int maxIter = Integer.MAX_VALUE;
 	
 	public IOLearningExperiment() {
 		random = new Random();
@@ -144,16 +144,12 @@ public class IOLearningExperiment {
 		DefaultQuery<PSymbolInstance, Boolean> ce = null;
 
 		int check = 0;
-		while (true && check < 100) {
+		while (true && check < maxIter) {
 			check++;
 			rastar.learn();
 			// hypothesis
 			Hypothesis hyp = rastar.getHypothesis();
 			
-			if (maxIter != 0 && check >= maxIter) {
-				break;
-			}
-
 			ce = equOracle.findCounterExample(hyp, null);
 
 			if (ce == null) {

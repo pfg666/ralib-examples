@@ -160,6 +160,8 @@ public class LSMV2SUL extends DataWordSUL {
 			 * wUpdate(laneChngReq,b4,b5,b6); // it is not wUpdate , but i don't think is
 			 * even needed
 			 */
+			
+			countResets(1);
 		} catch (InterruptedException e) {
 			System.out.println("Interrupted Exception");
 			System.out.println(e.getMessage());
@@ -227,7 +229,6 @@ public class LSMV2SUL extends DataWordSUL {
 				evalBuilder.append(vals[idx]);
 			}
 			evalBuilder.append(")");
-			System.out.println(evalBuilder.toString());
 			
 			matEng.eval(evalBuilder.toString());
 //    			System.out.println("computed main_v2");
