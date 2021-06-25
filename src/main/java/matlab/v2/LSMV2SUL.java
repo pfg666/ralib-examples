@@ -1,6 +1,6 @@
 //should be saved into FIFOSUL
 
-package matlab;
+package matlab.v2;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -19,6 +19,7 @@ import de.learnlib.ralib.words.InputSymbol;
 import de.learnlib.ralib.words.OutputSymbol;
 import de.learnlib.ralib.words.PSymbolInstance;
 import de.learnlib.ralib.words.ParameterizedSymbol;
+import matlab.MatlabWrapper;
 
 public class LSMV2SUL extends DataWordSUL {
 

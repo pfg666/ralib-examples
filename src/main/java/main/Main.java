@@ -20,7 +20,7 @@ import de.learnlib.ralib.tools.theories.IntegerEqualityTheory;
 import de.learnlib.ralib.words.PSymbolInstance;
 import de.learnlib.ralib.words.ParameterizedSymbol;
 import io.IOLearningExperiment;
-import matlab.LSMV2SUL;
+import matlab.v2.LSMV2SUL;
 import net.automatalib.words.Word;
 
 public class Main {

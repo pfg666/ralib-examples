@@ -39,7 +39,7 @@ public class IOLearningExperiment {
 	private Random random;
 	private long maxRuns = 1000; // maximum number of runs
 	private double resetProbability = 0.1; // reset probability
-	private double freshProbability = 0.5; // prob. of choosing a fresh data value
+	private double freshProbability = 0.0; // prob. of choosing a fresh data value
 	private int maxDepth = 100; // max depth
 	private int maxIter = Integer.MAX_VALUE;
 	
