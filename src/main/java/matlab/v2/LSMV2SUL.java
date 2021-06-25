@@ -25,7 +25,7 @@ public class LSMV2SUL extends DataWordSUL {
 
 	
 	public static final DataType INT_TYPE = new DataType("int", Integer.class);
-	public static final DataType LANE_CHANGE_REQUEST_TYPE = new DataType("int", Integer.class);
+	public static final DataType LANE_CHANGE_REQUEST_TYPE = new DataType("lcr", Integer.class);
 	
 	public static final int NUM_PARAM = 9;
 	
@@ -59,7 +59,6 @@ public class LSMV2SUL extends DataWordSUL {
 	
 
 	private static Map<Integer, Integer> boundParams = new LinkedHashMap<>();
-	
 
 	private static final ParameterizedSymbol generateInputSymbol(Map<Integer, Integer> boundParam) {
 		int numParam = NUM_PARAM - boundParam.size();

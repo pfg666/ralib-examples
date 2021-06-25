@@ -48,10 +48,10 @@ public class Main {
 		//boundParam.put(2, 0); // lcr
 		boundParam.put(3, 0); // b1
 		boundParam.put(4, 0); // b2
-		boundParam.put(5, 0); // lcr
+		//boundParam.put(5, 0); // lcr
 		boundParam.put(6, 0); // b4
 		boundParam.put(7, 0); // b5
-		boundParam.put(8, 0); // b5
+		boundParam.put(8, 0); // b6
 		LSMV2SUL.bindInputParameters(boundParam);
 	}
 	
