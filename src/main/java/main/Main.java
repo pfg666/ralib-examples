@@ -48,7 +48,7 @@ public class Main {
 		//boundParam.put(2, 0); // lcr
 		boundParam.put(3, 0); // b1
 		boundParam.put(4, 0); // b2
-		//boundParam.put(5, 0); // lcr
+//		boundParam.put(5, 0); // lcr
 		boundParam.put(6, 0); // b4
 		boundParam.put(7, 0); // b5
 		boundParam.put(8, 0); // b6
@@ -57,6 +57,7 @@ public class Main {
 	
 	public static void runLearningExperiment(int testLengthBound) throws ExecutionException, InterruptedException, TimeoutException {
 		Constants constants = new Constants();
+		// make sure to define constants for every type
 		ConstantGenerator cGen = new SymbolicDataValueGenerator.ConstantGenerator();
 		Constant c0 = cGen.next(LSMV2SUL.INT_TYPE);
 		Constant c1 = cGen.next(LSMV2SUL.INT_TYPE);
@@ -65,13 +66,23 @@ public class Main {
 		constants.put(c1, new DataValue(LSMV2SUL.INT_TYPE, 1));
 		constants.put(c2, new DataValue(LSMV2SUL.INT_TYPE, 2));
 		
+		Constant cDirLeft = cGen.next(LSMV2SUL.DIRECTION_TYPE);
+		Constant cDirRight = cGen.next(LSMV2SUL.DIRECTION_TYPE);
+		constants.put(cDirLeft, new DataValue(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, 1));
+		constants.put(cDirRight, new DataValue(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, 2));
+		
+		Constant cLcrFalse = cGen.next(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE);
+		constants.put(cLcrFalse, new DataValue(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, 0));
+		
 		IOLearningExperiment experiment = new IOLearningExperiment();
 		LSMV2SUL sul = new LSMV2SUL();
+		IntegerEqualityTheory dirTheory = new IntegerEqualityTheory(LSMV2SUL.DIRECTION_TYPE);
 		IntegerEqualityTheory lCRTheory = new IntegerEqualityTheory(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE);
 		IntegerEqualityTheory otherTheory = new IntegerEqualityTheory(LSMV2SUL.INT_TYPE);
 		
-		
+		// if main_v2 does not contain params of a certain type then the theory will not be used (hence it is unnecessary to remove it from the map) 
 		Map<DataType, Theory> theories = new LinkedHashMap<>();
+		theories.put(LSMV2SUL.DIRECTION_TYPE, dirTheory);
 		theories.put(LSMV2SUL.INT_TYPE, otherTheory);
 		theories.put(LSMV2SUL.LANE_CHANGE_REQUEST_TYPE, lCRTheory);
 		SimpleConstraintSolver solver = new SimpleConstraintSolver();

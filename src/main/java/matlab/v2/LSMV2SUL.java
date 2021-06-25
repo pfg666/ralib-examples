@@ -25,6 +25,7 @@ public class LSMV2SUL extends DataWordSUL {
 
 	
 	public static final DataType INT_TYPE = new DataType("int", Integer.class);
+	public static final DataType DIRECTION_TYPE = new DataType("dir", Integer.class);
 	public static final DataType LANE_CHANGE_REQUEST_TYPE = new DataType("lcr", Integer.class);
 	
 	public static final int NUM_PARAM = 9;
@@ -50,8 +51,17 @@ public class LSMV2SUL extends DataWordSUL {
 	 */
 	
 	public static final ParameterizedSymbol main_v2_orig = // public static final ParameterizedSymbol OFFER =
-			new InputSymbol("main_v2", new DataType[] { INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, 
-					INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE });
+			new InputSymbol("main_v2", new DataType[] { INT_TYPE, 
+
+					// direction (you enable typing for direction by using DIRECTION_TYPE instead of INT_TYPE)
+					//INT_TYPE,
+					DIRECTION_TYPE,
+					
+					// LCR (you enable typing for lcr by using LANE_CHANGE_REQUEST_TYPE instead of INT_TYPE)
+					//INT_TYPE, 
+					LANE_CHANGE_REQUEST_TYPE,
+					
+					INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE });
 	
 	
 	
@@ -73,9 +83,9 @@ public class LSMV2SUL extends DataWordSUL {
 		return new InputSymbol("main_v2", typeArr);
 	}
 	
-	public static final void bindInputParameters(Map<Integer, Integer> fixedParams) {
-		LSMV2SUL.boundParams = fixedParams;
-		main_v2 = generateInputSymbol(fixedParams); 
+	public static final void bindInputParameters(Map<Integer, Integer> boundParams) {
+		LSMV2SUL.boundParams = boundParams;
+		main_v2 = generateInputSymbol(boundParams); 
 	}
 	
 	public final ParameterizedSymbol[] getInputSymbols() {
